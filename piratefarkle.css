@@ -1,0 +1,11 @@
+body {
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 1 em;
+    font-weight: 700;
+    color: white;
+    background-color: black;
+}
+
+#topbar {
+    text-align: center;
+}
