@@ -1,11 +1,54 @@
+/* Global Styles ---------------------------------------*/
+html {
+    position: relative;
+    min-height: 100%;
+}
+
 body {
+    margin: 0 0 100px;
+    padding: 25px;
     font-family: 'Courier New', Courier, monospace;
     font-size: 1 em;
     font-weight: 700;
     color: white;
     background-color: black;
-}
-
-#topbar {
     text-align: center;
 }
+
+.button {
+    background: black;
+    text-align: center;
+    font-size: 20px;
+    padding: 5px 10px;
+    color: white;
+    border: solid, white, 2px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+}
+
+.button:hover {
+    background: white;
+    color: black;
+  }
+
+/* Header -----------------------------------*/
+
+#header {
+    text-align: center;
+}
+
+/* Footer -----------------------------------*/
+
+#footer {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 100px;
+    width: 100%;
+    overflow: hidden;
+}
+
+
+
+

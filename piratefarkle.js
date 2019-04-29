@@ -1,14 +1,14 @@
 //variables
 
 let hand = [6, 6, 6, 6, 6];//default hand will be all jollyrogers.
-let players = new Array;//function - each player: points object must be in this array
+let players = [];//function - each player: points object must be in this array
 // and only an array can index each player?
 let currentPoints = 0;
 let currentPlayer = 0;
 
 
 
-    //faces - there are six. We need a value, a face and a url for each.
+//faces - there are six. We need a value, a face and a url for each.
 
 
 //functions
