@@ -6,22 +6,20 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Pirate Farkle!</title>
     <link href="piratefarkle.css" rel="stylesheet" type="text/css"/>
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script>
-    <script src="piratefarkle.js">$(document).ready(function(){alert('Document Ready!')});</script>
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script> -->
+    <!-- <script src="piratefarkle.js">$(document).ready(function(){alert('Document Ready!')});</script> -->
+    
 </head>
 <body>
-    <div id="header">
-        <img src="piratefarkletitle2.gif" alt="Pirate Farkle!">
-    </div>
-    <div class="spacer">
-    </div>
     <div id="gamecontent">
-        <button type="button" class="button">Start!</button>
+        <img src="piratefarkletitle2.gif" alt="Pirate Farkle!">
+        </br>
+        <button type="button" class="button" onclick="gameState1();">Start!</button>
     </div>
     <div id="footer">
-            <button type="button" class="button">Rules</button>
+            <button type="button" class="button" onclick="rules();">Rules</button>
             <p>&copy; Legendary Games; Coded by Jeff Andrews 2019</p>
     </div>
-
+    <script src="piratefarkle.js"></script>
 </body>
 </html>
