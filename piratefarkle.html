@@ -11,10 +11,21 @@
     
 </head>
 <body>
-    <div id="gamecontent">
+    <div id="startScreen">
         <img src="piratefarkletitle2.gif" alt="Pirate Farkle!">
         </br>
-        <button type="button" class="button" onclick="gameState1();">Start!</button>
+        <button type="button" class="button" onclick="startGame();">Start Game!</button>
+    </div>
+    <div id="gameContent">
+        <div>
+            <img class="die" id="die0" src="six.png" width="200" height="200" alt="die goes here!">
+            <img class="die" id="die1" src="six.png" width="200" height="200" alt="die goes here!">
+            <img class="die" id="die2" src="six.png" width="200" height="200" alt="die goes here!">
+            <img class="die" id="die3" src="six.png" width="200" height="200" alt="die goes here!">
+            <img class="die" id="die4" src="six.png" width="200" height="200" alt="die goes here!">
+            <img class="die" id="die5" src="six.png" width="200" height="200" alt="die goes here!">
+        </div>
+        <button onclick="rollDice()">Roll The Dice!</button>
     </div>
     <div id="footer">
             <button type="button" class="button" onclick="rules();">Rules</button>
