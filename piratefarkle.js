@@ -1,7 +1,7 @@
 
 //variables
 
-//an array of 'player: points' objects
+//an array of 'name: points' objects
 let players = [];
 
 var currentPoints = 0;
@@ -15,7 +15,7 @@ const gameContent = document.getElementById("gameContent");
 
 //gameState0/start screen/global functions
     //reset
-    function gameState0() {
+    function enterPlayers() {
 
     }
     //rules function
@@ -26,7 +26,7 @@ const gameContent = document.getElementById("gameContent");
 //gameState1
     function startGame() {
         startScreen.style.display = "none";
-        gameContent.style.display = "block";
+        gameContent.style.display = "inline-block";
     }
         //how many players? If only one player, alert 'this game requires two or more players', reset input.
         //player 1 name, set score to 0, add to object or array of players

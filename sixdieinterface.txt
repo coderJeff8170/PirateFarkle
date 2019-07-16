@@ -1,8 +1,0 @@
-Screen prints name and score at top, updates upon name entry and when score raises.
-
-Six die defaulted to jolly roger.
-
-can keep rolling just like in pirate farkle, but will crap out and not keep score if round lost.
-
-10000 wins.
-
