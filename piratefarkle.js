@@ -15,6 +15,7 @@ const gameContent = document.getElementById("gameContent");
 
 //gameState0/start screen/global functions
     //reset
+//enterPlayers should be a modal window, or a new div?
     function enterPlayers() {
 
     }
