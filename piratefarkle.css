@@ -20,10 +20,33 @@ body {
     text-align: center;
 }
 
-#gameContent {
+#playerEntry {
     display: none;
+    font-size: 1.5em;
+}
+
+#gameWrapper {
+    display: none;
+    grid-template-columns: auto 250px ;
+    height: 100%;
     text-align: center;
-    max-width: 600px;
+}
+
+#gameContent1 {
+  /*   padding-top: 15px; */
+    width: auto;
+    height: 1000px;
+    text-align: center;
+}
+
+#die {
+    grid-template-columns: 164px 164px 164px;
+    text-align: center;
+}
+
+#gameContent2 {
+    width: 250px;
+    height: 1000px;
 }
 
 .die {
@@ -63,12 +86,15 @@ body {
 /* Footer -----------------------------------*/
 
 #footer {
-    position: absolute;
-    left: 0;
+
+    background-color: black;
+    position: fixed;
     bottom: 0;
     height: 100px;
     width: 100%;
     overflow: hidden;
+    border-top: 2px solid white;
+    padding-top: 15px;
 }
 
 

@@ -1,45 +1,61 @@
 
 //variables
-
-//an array of 'name: points' objects
-let players = [];
+let playerArray = [];
 
 var currentPoints = 0;
 var currentPlayer = 0;
 var dieArray = ['one.png','two.png','three.png','four.png','five.png','six.png'];
 
-
-
 const startScreen = document.getElementById("startScreen");
-const gameContent = document.getElementById("gameContent");
+const playerEntry = document.getElementById("playerEntry");
+const gameContent = document.getElementById("gameWrapper");
 
-//gameState0/start screen/global functions
-    //reset
-//enterPlayers should be a modal window, or a new div?
-    function enterPlayers() {
-
+class Player {
+    constructor(name, score){
+        this.name = name;
+        this.score = score;
     }
+}
+
+function startGame() {
+    startScreen.style.display = "none";
+    playerEntry.style.display = "block";
+}
+
+//how many players? If only one player, alert 'this game requires two or more players', reset input.
+function addPlayer() {
+    var x = document.getElementById("myText").value;
+    playerArray.push(x);
+    console.log(playerArray);
+    //enable carriage returns to add players
+    //reset field value after each addition.
+    //show each player's name as it's entered, with score?
+    //div for players, right sidebar (topbar for mobile), li created for each player,
+    //bulleted only when player is active.
+  }
+
+function done(array) {
+    var playerScoreArray = [];
+    for (i=0; i<array.length; i++) {
+        playerScoreArray[i] = new Player(array[i], 0);
+        //playerScoreArray.push(player[i]);
+        console.log(playerScoreArray[i]);
+    }
+    //go to game screen, random player, loop through players each round
+    //starting with random player
+    //Modal with player's name between each round.
+
+    //randomizer determines first player to go.
+    //result changes value of currentPlayer, this player starts game and then it's sequential.
+    //need "activePlayer" function?
+    playerEntry.style.display = "none";
+    gameContent.style.display = "grid";
+}
+
     //rules function
-    function rules() {
-        alert('these are the rules!');
-    }
-
-//gameState1
-    function startGame() {
-        startScreen.style.display = "none";
-        gameContent.style.display = "inline-block";
-    }
-        //how many players? If only one player, alert 'this game requires two or more players', reset input.
-        //player 1 name, set score to 0, add to object or array of players
-        //repeat until number of players set
-        //play button
-//six random dice roll function called every time button is pushed
-//and show a corresponding face in the html for each dice/roll.
-
-//gameState2
-    //roll high score to determine first player to go.
-    //result of high score changes value of currentPlayer, this player starts game and then it's sequential.
-
+function rules() {
+    alert('these are the rules!');
+}
 
 function rollDice() {
     let currentHand = [];
@@ -58,14 +74,24 @@ function rollDice() {
     
     //evaluate rolled dice after each turn unless player farkles
     
-    //function to check for a straight and add points if true.
-    function evalStraight(hand){
+    //function to check for a sixOfAKind and add 3000 points if true.
+    function evalSixKind(hand){
         for(i=0; i<hand.length-1; i++) {
             if (hand[i] != hand[i+1]) {
                 return false;
             }
         }
-        crntPnts = crntPnts + 1000;
+        crntPnts = crntPnts + 3000;
+        return true;
+    }
+    //function to check for a straight (1, 2, 3, 4, 5, 6) give 1500 points
+    function evalStraight(hand){
+        for(i=0; i<hand.length-1; i++) {
+            if (hand[i] != hand[i+1]+1) {
+                return false;
+            }
+        }
+        crntPnts = crntPnts + 1500;
         return true;
     }
     //function to evaluate hand for points
@@ -76,14 +102,20 @@ function rollDice() {
         let fours = hand.filter(x => x === 3);
         let fives = hand.filter(x => x === 4);
         let sixes = hand.filter(x => x === 5);
-    
+    //check for pairs
         if (hand[0] === hand[1] && hand[2] === hand[3] && hand[4] === hand[5]) {
-            crntPnts = crntPnts + 500;
+            crntPnts = crntPnts + 1500;
             return;
         }
-    
+    //check for triplets
+    if (hand[0] === hand[1] && hand[1] === hand[2] && hand[3] === hand[4] && hand[4] === hand[5]) {
+        crntPnts = crntPnts + 2500;
+        return;
+    }
+
+    //check hand for points
         if (ones.length === 3) {
-            crntPnts = crntPnts + 1000;
+            crntPnts = crntPnts + 300;
         } else {
             crntPnts = crntPnts + (ones.length * 100);
         }
@@ -105,8 +137,8 @@ function rollDice() {
             crntPnts = crntPnts + 600;
         }
     }
-    //check for a straight and add points if true. If false, evaluate hand for points;
-    evalStraight(sortHand) ? true : evalHand(sortHand);
+    //check for a sixkind and add points if true. If false, evaluate for straight; if false evaluate hand;
+    evalSixKind(sortHand) ? true : evalStraight(sortHand) ? true : evalHand(sortHand);
 
     
     console.log(crntPnts);

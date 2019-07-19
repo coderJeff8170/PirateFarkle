@@ -16,16 +16,44 @@
         </br>
         <button type="button" class="button" onclick="startGame();">Start Game!</button>
     </div>
-    <div id="gameContent">
-        <div>
-            <img class="die" id="die0" src="one.png" width="200" height="200" alt="die goes here!">
-            <img class="die" id="die1" src="one.png" width="200" height="200" alt="die goes here!">
-            <img class="die" id="die2" src="one.png" width="200" height="200" alt="die goes here!">
-            <img class="die" id="die3" src="one.png" width="200" height="200" alt="die goes here!">
-            <img class="die" id="die4" src="one.png" width="200" height="200" alt="die goes here!">
-            <img class="die" id="die5" src="one.png" width="200" height="200" alt="die goes here!">
+    <div id="playerEntry">
+        Name: <input type="text" id="myText" name="fname" value="none"><br>
+
+        <p>Type a name and click the button to add players, and click 'done' when finished.</p>
+
+        <button type="button" class="button" onclick="addPlayer()" onclick="addPlayerScore()">Add Player</button>
+
+        <p id="demo"></p><!--list names as they're entered?-->
+
+        <button type="button" class="button" onclick="done(playerArray)">Done</button>
+        <!--start over button?-->
+    </div>
+
+
+    <div id="gameWrapper">
+        <div id="gameContent1">
+            <h1>Pirate Farkel!</h1>
+            <div id="die">
+                <img class="die" id="die0" src="one.png" width="200" height="200" alt="die goes here!">
+                <img class="die" id="die1" src="one.png" width="200" height="200" alt="die goes here!">
+                <img class="die" id="die2" src="one.png" width="200" height="200" alt="die goes here!">
+                <br>
+                <img class="die" id="die3" src="one.png" width="200" height="200" alt="die goes here!">
+                <img class="die" id="die4" src="one.png" width="200" height="200" alt="die goes here!">
+                <img class="die" id="die5" src="one.png" width="200" height="200" alt="die goes here!">
+            </div>
+            <br>
+            <button type="button" class="button" onclick="rollDice()">Roll The Dice!</button>
         </div>
-        <button onclick="rollDice()">Roll The Dice!</button>
+        <div id="gameContent2">
+            <!--Player score objects go here as a right hand sidebar/topbar for mobile-->
+            <h1>Player:</h1>
+            <p>Jeff: 0</p>
+            <p>Jeff: 0</p>
+            <p>Jeff: 0</p>
+            <p>Jeff: 0</p>
+            <p>Jeff: 0</p>
+        </div>
     </div>
     <div id="footer">
             <button type="button" class="button" onclick="rules();">Rules</button>
