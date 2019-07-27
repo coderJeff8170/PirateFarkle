@@ -21,13 +21,28 @@ body {
 }
 
 #playerEntry {
-    display: none;
     font-size: 1.5em;
+    display: none;
+    grid-template-columns: repeat(3, 250px);
+}
+
+#playerEntry1 {
+    grid-column-start: 1;
+    grid-column-end: 3;
+    /* width: 600px; */
+    height: 1000px;
+}
+
+#playerEntry2 {
+    grid-column-start: 3;
+    grid-column-end: 4;
+    /* width: 250px; */
+    height: 1000px;
 }
 
 #gameWrapper {
     display: none;
-    grid-template-columns: auto 250px ;
+    grid-template-columns: auto 250px;
     height: 100%;
     text-align: center;
 }
@@ -45,6 +60,7 @@ body {
 }
 
 #gameContent2 {
+    font-size: 1.5em;
     width: 250px;
     height: 1000px;
 }

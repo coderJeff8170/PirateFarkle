@@ -14,19 +14,22 @@
     <div id="startScreen">
         <img src="piratefarkletitle2.gif" alt="Pirate Farkle!">
         </br>
-        <button type="button" class="button" onclick="startGame();">Start Game!</button>
+        <button type="button" class="button" onclick="startGame()">Start Game!</button>
     </div>
     <div id="playerEntry">
-        Name: <input type="text" id="myText" name="fname" value="none"><br>
+        <div id="playerEntry1">
+            Name: <input type="text" id="nameInput" value=""><br>
 
-        <p>Type a name and click the button to add players, and click 'done' when finished.</p>
+            <p>Type a name and click the button to add players, and click 'done' when finished.</p>
 
-        <button type="button" class="button" onclick="addPlayer()" onclick="addPlayerScore()">Add Player</button>
+            <button type="button" class="button" id="addPlayer" onclick="addPlayer()" onclick="addPlayerScore()">Add Player</button>
 
-        <p id="demo"></p><!--list names as they're entered?-->
+            <p id="demo"></p><!--list names as they're entered?-->
 
-        <button type="button" class="button" onclick="done(playerArray)">Done</button>
-        <!--start over button?-->
+            <button type="button" class="button" onclick="done(playerArray)">Done</button>
+            <button type="button" class="button" onclick="startGame()">Reset</button>
+        </div>
+        <div id="playerEntry2">Player:<br></div>
     </div>
 
 
@@ -45,15 +48,7 @@
             <br>
             <button type="button" class="button" onclick="rollDice()">Roll The Dice!</button>
         </div>
-        <div id="gameContent2">
-            <!--Player score objects go here as a right hand sidebar/topbar for mobile-->
-            <h1>Player:</h1>
-            <p>Jeff: 0</p>
-            <p>Jeff: 0</p>
-            <p>Jeff: 0</p>
-            <p>Jeff: 0</p>
-            <p>Jeff: 0</p>
-        </div>
+        <div id="gameContent2">Player:<br></div>
     </div>
     <div id="footer">
             <button type="button" class="button" onclick="rules();">Rules</button>

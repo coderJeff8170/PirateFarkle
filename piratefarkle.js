@@ -1,15 +1,19 @@
-
 //variables
 let playerArray = [];
 
-var currentPoints = 0;
-var currentPlayer = 0;
+var currentPoints;
+var currentPlayer;
 var dieArray = ['one.png','two.png','three.png','four.png','five.png','six.png'];
 
 const startScreen = document.getElementById("startScreen");
 const playerEntry = document.getElementById("playerEntry");
 const gameContent = document.getElementById("gameWrapper");
+var addPlayers = document.getElementById("playerEntry2");
+var playerScoreBoard = document.getElementById("gameContent2");
+var playerScoreArray;
+var activePlayer;
 
+//classes
 class Player {
     constructor(name, score){
         this.name = name;
@@ -17,39 +21,72 @@ class Player {
     }
 }
 
+//functions
 function startGame() {
     startScreen.style.display = "none";
-    playerEntry.style.display = "block";
+    playerEntry.style.display = "grid";
+    playerArray = [];
+    playerScoreArray = [];
+    addPlayers.innerHTML = "Players:<br>"
 }
 
-//how many players? If only one player, alert 'this game requires two or more players', reset input.
 function addPlayer() {
-    var x = document.getElementById("myText").value;
-    playerArray.push(x);
-    console.log(playerArray);
+    var name = document.getElementById("nameInput");
+    if (name.value == '') {
+        alert('you must input a name!');
+        return;
+    }else if(playerArray.includes(name.value) ) {
+        alert('each player must have a different name!');
+        name.value = '';
+        return;
+    }else{
+        playerArray.push(name.value);
+        addPlayers.innerHTML += `<br>${name.value}`;
+        console.log(playerArray);
+        name.value = "";
+        }
     //enable carriage returns to add players
-    //reset field value after each addition.
-    //show each player's name as it's entered, with score?
-    //div for players, right sidebar (topbar for mobile), li created for each player,
+    //li created for each player,
     //bulleted only when player is active.
   }
 
 function done(array) {
-    var playerScoreArray = [];
+    if (array.length == 1 || array.length == 0) {
+        alert('this game requires two or more players');
+        startGame();
+        return;
+    }
     for (i=0; i<array.length; i++) {
         playerScoreArray[i] = new Player(array[i], 0);
+        playerScoreBoard.innerHTML += `<br>${playerScoreArray[i].name}: ${playerScoreArray[i].score}`;
         //playerScoreArray.push(player[i]);
-        console.log(playerScoreArray[i]);
+        console.log(playerScoreArray[i]);//I'm not going to be able to manipulate the names easily, am I??
     }
-    //go to game screen, random player, loop through players each round
-    //starting with random player
-    //Modal with player's name between each round.
+    console.log(playerScoreBoard.innerHTML);
+choosePlayer(array);
+initializeDice();
+    //Modal with player's name between each round?
+}
 
-    //randomizer determines first player to go.
-    //result changes value of currentPlayer, this player starts game and then it's sequential.
-    //need "activePlayer" function?
+function choosePlayer(array) {
+    firstPlayer = (Math.floor(Math.random() * array.length));
+    currentPlayer = firstPlayer;
+    alert(`${array[firstPlayer]} is the first player!`);
+}
+
+function initializeDice() {
     playerEntry.style.display = "none";
     gameContent.style.display = "grid";
+}
+
+//loop through players each round
+function updateRound() {
+    //add current points to current player's total
+    currentPlayer += currentPlayer;
+    currentPoints = 0;
+    //playerScoreArray[currentPlayer]
+    //reset current points to zero.
+    //add 'stay' button?
 }
 
     //rules function
@@ -65,9 +102,7 @@ function rollDice() {
     currentHand.push(roll);
     }
 
-    //tally points
-
-    let crntPnts = 0;
+    currentPoints = 0;
     
     //put hand in order, to check for pairs
     let sortHand = currentHand.sort(function(a, b){return a-b});
@@ -81,7 +116,7 @@ function rollDice() {
                 return false;
             }
         }
-        crntPnts = crntPnts + 3000;
+        currentPoints = currentPoints + 3000;
         return true;
     }
     //function to check for a straight (1, 2, 3, 4, 5, 6) give 1500 points
@@ -91,7 +126,7 @@ function rollDice() {
                 return false;
             }
         }
-        crntPnts = crntPnts + 1500;
+        currentPoints = currentPoints + 1500;
         return true;
     }
     //function to evaluate hand for points
@@ -104,44 +139,44 @@ function rollDice() {
         let sixes = hand.filter(x => x === 5);
     //check for pairs
         if (hand[0] === hand[1] && hand[2] === hand[3] && hand[4] === hand[5]) {
-            crntPnts = crntPnts + 1500;
+            currentPoints = currentPoints + 1500;
             return;
         }
     //check for triplets
     if (hand[0] === hand[1] && hand[1] === hand[2] && hand[3] === hand[4] && hand[4] === hand[5]) {
-        crntPnts = crntPnts + 2500;
+        currentPoints = currentPoints + 2500;
         return;
     }
 
     //check hand for points
         if (ones.length === 3) {
-            crntPnts = crntPnts + 300;
+            currentPoints = currentPoints + 300;
         } else {
-            crntPnts = crntPnts + (ones.length * 100);
+            currentPoints = currentPoints + (ones.length * 100);
         }
         if (twos.length === 3) {
-            crntPnts = crntPnts + 200;
+            currentPoints = currentPoints + 200;
         }
         if (threes.length === 3) {
-            crntPnts = crntPnts + 300;
+            currentPoints = currentPoints + 300;
         }
         if (fours.length === 3) {
-            crntPnts = crntPnts + 400;
+            currentPoints = currentPoints + 400;
         }
         if (fives.length === 3) {
-            crntPnts = crntPnts + 500;
+            currentPoints = currentPoints + 500;
         } else {
-            crntPnts = crntPnts + (fives.length * 50);
+            currentPoints = currentPoints + (fives.length * 50);
         }
         if (sixes.length === 3) {
-            crntPnts = crntPnts + 600;
+            currentPoints = currentPoints + 600;
         }
     }
     //check for a sixkind and add points if true. If false, evaluate for straight; if false evaluate hand;
     evalSixKind(sortHand) ? true : evalStraight(sortHand) ? true : evalHand(sortHand);
 
     
-    console.log(crntPnts);
+    console.log(currentPoints);
 
     //if no points, next player, assign farkle (if player gets three farkles in a row, -1000 points)
 

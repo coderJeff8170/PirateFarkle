@@ -1,7 +1,7 @@
 /* let's figure out how to basically have a sidebar on the left in css */
 
 
-#wrapper {
+/* #wrapper {
     display: grid;
     grid-template-columns: auto 250px ;
     height: 100%;
@@ -18,4 +18,4 @@
     width: 250px;
     height: 1000px;
     background-color: red;
-}
+} */
