@@ -26,7 +26,7 @@
 
             <p id="demo"></p><!--list names as they're entered?-->
 
-            <button type="button" class="button" onclick="done(playerArray)">Done</button>
+            <button type="button" class="button" onclick="doneAddingPlayers(playerArray)">Done</button>
             <button type="button" class="button" onclick="startGame()">Reset</button>
         </div>
         <div id="playerEntry2">Player:<br></div>
@@ -47,12 +47,20 @@
             </div>
             <br>
             <button type="button" class="button" onclick="rollDice()">Roll The Dice!</button>
+            <button type="button" class="button" onclick="updateRound(playerScoreArray)">Stay!</button>
         </div>
-        <div id="gameContent2">Player:<br></div>
+        <div>
+            <h1 id="roundText">Round 1:</h1>
+            <br>
+            <ul id="gameContent2"></ul>
+        </div>
+        
     </div>
     <div id="footer">
-            <button type="button" class="button" onclick="rules();">Rules</button>
-            <p>&copy; Legendary Games; Coded by Jeff Andrews 2019</p>
+        <h2 id="gameConsoleMessage"></h2>
+
+        <button type="button" class="button" onclick="rules();">Rules</button>
+        <p>&copy; Legendary Games; Coded by Jeff Andrews 2019</p>
     </div>
     <script src="piratefarkle.js"></script>
 </body>
