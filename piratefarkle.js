@@ -20,9 +20,10 @@ var activePlayer;
 
 //classes
 class Player {
-    constructor(name, score){
+    constructor(name, score, active){
         this.name = name;
         this.score = score;
+        this.active = active;
     }
 }
 
@@ -48,11 +49,9 @@ function addPlayer() {
         playerArray.push(name.value);
         addPlayers.innerHTML += `<br>${name.value}`;
         console.log(playerArray);
-        name.value = "";
+        name.value = '';
         }
     //enable carriage returns to add players
-    //li created for each player,
-    //bulleted only when player is active.
   }
 
 function updatePlayers(array, location){
@@ -61,8 +60,9 @@ function updatePlayers(array, location){
         let textnode = document.createTextNode(`${array[i].name}: ${array[i].score}`);
         node.appendChild(textnode);
         location.appendChild(node);
+        }
     }
-}
+
 
 function doneAddingPlayers(array) {
     if (array.length == 1 || array.length == 0) {
@@ -71,19 +71,36 @@ function doneAddingPlayers(array) {
         return;
     }
     for (i=0; i<array.length; i++) {
-        playerScoreArray[i] = new Player(array[i], 0);
+        playerScoreArray[i] = new Player(array[i], 0, false);
     }
+    choosePlayer(playerScoreArray);
     updatePlayers(playerScoreArray, playerScoreBoard);
-    choosePlayer(array);
     initializeDice();
+    setPlayerActive(playerScoreBoard, playerScoreArray);
 }
 
 function choosePlayer(array) {
     firstPlayer = (Math.floor(Math.random() * array.length));
     currentPlayer = firstPlayer;
-    alert(`${array[currentPlayer]} is the first player!`);
-    gameMessage.innerHTML = `Hello ${array[currentPlayer]}. Please roll the dice.`
-    //change color of current player
+    alert(`${array[currentPlayer].name} is the first player!`);
+    gameMessage.innerHTML = `Hello ${array[currentPlayer].name}. Please roll the dice.`
+    array[currentPlayer].active = true;
+}
+
+//change color of current player
+function setPlayerActive(location, array) {
+    let currentPlayers = location.getElementsByTagName('li');
+
+    for(i=0; i<array.length; i++) {
+        if(array[i].active === true) {
+            console.log(`${array[i].name} is the active player; that's position ${[i]} in playerScoreArray`);
+            currentPlayers[i].style.color = 'red';
+            currentPlayers[i].style.listStyle = 'default';
+        } else {
+            currentPlayers[i].style.color = 'white';
+            currentPlayers[i].style.listStyle = 'none';
+        }
+    }
 }
 
 function initializeDice() {
@@ -95,38 +112,41 @@ function checkScore(el) {
     if (el.score >= 5000) {
         alert(`${el.name} has won!!`);
         //gameMessage.innerHTML = `${el.name} has won!!`;
-        startScreen.style.display = "block";
-        playerEntry.style.display = "none";
-        gameContent.style.display = "none";
-        //execute a 'reset game' or document reload function here
-
+        location.reload();
     }
 }
 
 function updateRound(array) {
-    
     //figure out why this executes late
     array.some(checkScore);
     //add current points to current player's total
     array[currentPlayer].score += currentPoints;
+    playerScoreArray[currentPlayer].active = false;
     //update player list
     playerScoreBoard.innerHTML = '';
     updatePlayers(playerScoreArray, playerScoreBoard);
     //return to start of array after last player
     if(currentPlayer==(array.length-1)) {currentPlayer = 0;
-    }else{
-    currentPlayer ++;
+        }else{
+        currentPlayer ++;
     }
+    playerScoreArray[currentPlayer].active = true;
+    console.log(playerScoreArray);
     currentPoints = 0;
     roundCount++;
+
     if (roundCount == array.length){
         roundText.innerHTML = `Round ${++round}:`;
         roundCount = 0;
     }
-
+    setPlayerActive(playerScoreBoard, playerScoreArray);
     gameMessage.innerHTML = `Hello ${array[currentPlayer].name}. Please roll the dice.`
+
+    //array[currentPlayer].active = true;
+    //change color of current player
+    console.log(array);
+
     //if current player set red and bulleted.
-    //add 'stay' button?
 }
 
 //rules function

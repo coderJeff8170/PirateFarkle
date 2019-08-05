@@ -20,7 +20,7 @@
         <div id="playerEntry1">
             Name: <input type="text" id="nameInput" value=""><br>
 
-            <p>Type a name and click the button to add players, and click 'done' when finished.</p>
+            <p id="addPlayerInstruction">Type a name and click the button to add players, and click 'done' when finished.</p>
 
             <button type="button" class="button" id="addPlayer" onclick="addPlayer()" onclick="addPlayerScore()">Add Player</button>
 
@@ -49,7 +49,7 @@
             <button type="button" class="button" onclick="rollDice()">Roll The Dice!</button>
             <button type="button" class="button" onclick="updateRound(playerScoreArray)">Stay!</button>
         </div>
-        <div>
+        <div id = "playerBar">
             <h1 id="roundText">Round 1:</h1>
             <br>
             <ul id="gameContent2"></ul>

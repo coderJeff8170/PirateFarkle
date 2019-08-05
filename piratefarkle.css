@@ -6,7 +6,7 @@ html {
 
 body {
     margin: 0 0 100px;
-    padding: 25px;
+    padding-top: 25px;
     font-family: 'Courier New', Courier, monospace;
     font-size: 1 em;
     font-weight: 700;
@@ -23,21 +23,27 @@ body {
 #playerEntry {
     font-size: 1.5em;
     display: none;
-    grid-template-columns: repeat(3, 250px);
+    grid-template-columns: auto 250px;
 }
 
 #playerEntry1 {
-    grid-column-start: 1;
-    grid-column-end: 3;
+    width: auto;
     /* width: 600px; */
     height: 1000px;
+    text-align: center;
+}
+
+#addPlayerInstruction {
+    width: auto;
+/*     text-align: center;
+    position: relative;
+    display: block; */
 }
 
 #playerEntry2 {
-    grid-column-start: 3;
-    grid-column-end: 4;
-    /* width: 250px; */
+    width: 250px;
     height: 1000px;
+    border-left: 2px white;
 }
 
 #gameWrapper {
@@ -57,6 +63,10 @@ body {
 #die {
     grid-template-columns: 164px 164px 164px;
     text-align: center;
+}
+#playerBar {
+   /*  add a white line to the left. why isn't working? */
+
 }
 
 #gameContent2 {

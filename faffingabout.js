@@ -29,6 +29,18 @@ for (let cell of cells) {
   }
 } */
 
+/* // Check the status of each data cell in a table
+const myList = document.getElementById('gameContent2'); 
+const players = myList.getElementsByTagName('li');
+//add a player status to the object!
+
+for (let player of players) {
+  let status = cell.getAttribute('data-status');
+  if (status === 'open') {
+    // Grab the data 
+  }
+} */
+
 let myArray = [{name: 'Jeff', score: 0}, {name: 'Cece', score: 10001}, {name: 'Audrey', score: 0}];
 
 myArray.some(checkScore);
@@ -38,3 +50,4 @@ function checkScore(el) {
         console.log(`${el.name} has won!!`);
     }
 }
+
