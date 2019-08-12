@@ -47,7 +47,7 @@ body {
 }
 
 #gameWrapper {
-    display: none;
+    display: grid;
     grid-template-columns: auto 250px;
     height: 100%;
     text-align: center;

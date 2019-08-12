@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Pirate Farkle!</title>
+    <link href="piratefarkle2.css" rel="stylesheet" type="text/css"/>
+    <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.0/jquery.min.js"></script> -->
+    <!-- <script src="piratefarkle.js">$(document).ready(function(){alert('Document Ready!')});</script> -->
+    
+</head>
+<body>
+
+    <div id="gameWrapper">
+        <div id="gameContent1">
+            <h1>Pirate Farkel!</h1>
+            <div id="die">
+                    
+                <img class="die" id="die0" src="one.png" width="200" height="200" alt="die goes here!">
+                <img class="die" id="die1" src="one.png" width="200" height="200" alt="die goes here!">
+                <img class="die" id="die2" src="one.png" width="200" height="200" alt="die goes here!">
+                <br>
+                <img class="die" id="die3" src="one.png" width="200" height="200" alt="die goes here!">
+                <img class="die" id="die4" src="one.png" width="200" height="200" alt="die goes here!">
+                <img class="die" id="die5" src="one.png" width="200" height="200" alt="die goes here!">
+            </div>
+            <br>
+            <button type="button" class="button" onclick="processHand(dieClass, dieArray)">Roll The Dice!</button>
+           
+        </div>
+        <div id = "playerBar">
+            <h1 id="roundText">Round 1:</h1>
+            <br>
+            <ul id="gameContent2"></ul>
+        </div>
+        
+    </div>
+    <div id="footer">
+        <h2 id="gameConsoleMessage"></h2>
+
+        <button type="button" class="button" onclick="rules();">Rules</button>
+        <p>&copy; Legendary Games; Coded by Jeff Andrews 2019</p>
+    </div>
+    <script src="faffingabout3.js"></script>
+</body>
+</html>
