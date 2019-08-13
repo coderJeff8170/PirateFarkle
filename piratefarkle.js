@@ -1,5 +1,6 @@
 //global variables - yikes!
 let playerArray = [];
+let dieArray = [];
 let roundCount = 0;
 let round = 1;
 let firstPlayer;
@@ -116,11 +117,31 @@ function setPlayerActive(location, array) {
         }
     }
 }
+//fill dieArray with dice objects
+function createDice(){
+    for (i=0; i<=5; i++) {
+        dieArray[i] = new Die(`die${i}`, 'one.png');
+        }
+  }
 //make dice and scoring visible and player entry invisible
 function initializeDice() {
+    createDice();
     playerEntry.style.display = "none";
     gameContent.style.display = "grid";
 }
+
+for (var i = 0; i < dieClass.length; i++) {
+  dieClass[i].addEventListener("click", function() {
+  if(this.className != "die inactive") {
+  this.className = "die inactive";
+  }else{
+  this.className = "die";
+  }
+  });
+}
+
+
+
 //check to see if there's a winning score
 function checkScore(el) {
     if (el.score >= 5000) {
@@ -158,6 +179,7 @@ function updateRound(array) {
 }
 //makes die inactive when clicked, and gets new hand when roll button is pushed(currently inactive function)
 function processHand(dieInterfaces, dieObjects) {
+    let currentHand = [];
     for(i=0; i<dieInterfaces.length; i++) {
       if(dieInterfaces[i].className === 'die inactive') {
         dieObjects[i].active = false;
@@ -165,21 +187,33 @@ function processHand(dieInterfaces, dieObjects) {
         dieObjects[i].active = true;
       }
     }
-    getNewHand(dieObjects);
+    getCurrentHand(dieObjects, currentHand);
+
+    let sortHand = currentHand.sort(function(a, b){return a-b});
+
+    //check for a sixkind and add points if true. If false, evaluate for straight; if false evaluate hand;
+    evalSixKind(sortHand) ? true : evalStraight(sortHand) ? true : evalMain(sortHand);
+
+    console.log(currentPoints);
+
+    //if no points, next player, assign farkle (if player gets three farkles in a row, -1000 points)
+
+    console.log(currentHand);
+    currentHand = [];
   }
 //calls rollDie on each die as long as they're active, and puts a value on each die.
 //also returns a new hand based on all values of active die (currently inactive function)
-function getNewHand (array) {
-    let newHand = [];
+function getCurrentHand (array, hand) {
+
     for (i=0; i<array.length; i++) {
         if (array[i].active === true) {
         array[i].value = array[i].rollDie();
-        newHand.push(array[i].value);
+        hand.push(array[i].value);
         document.getElementById(`die${[i]}`).src = dieImageArray[array[i].value];
         }
     }
-console.log(newHand);
-return newHand;
+console.log(hand);
+return hand;
 }
 
 
@@ -254,7 +288,7 @@ function evalMain(hand) {
 //remove rolling functionality; call 'processHand()' and insert current hand array
 //maybe add a message indicating what type of hand they got...
 
-function rollDice() {
+/* function rollDice() {
     let currentHand = [];
     for(i=0; i<=5; i++) {// i<=(arg.length)
     let roll = (Math.floor(Math.random() * 6));
@@ -274,7 +308,7 @@ function rollDice() {
     console.log(currentHand);
     currentHand = [];
 }
-
+ */
 /*  function createDice() {
     let mydieArray = [];
 
