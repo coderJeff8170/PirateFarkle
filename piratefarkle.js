@@ -1,12 +1,21 @@
+//if all dice are active when you roll again, current points = current points minus previous current points
+//if a roll yields zero points, next player, add a farkle.
+//if a player gets three farkles, minus 1000, reset farkles to zero.
+
+
+
+
+
+
 //global variables - yikes!
-let playerArray = [];
+let playerEntryArray = [];
 let dieArray = [];
 let roundCount = 0;
 let round = 1;
 let firstPlayer;
+let currentPlayer;
 var currentPoints = 0;
-var playerScoreArray;
-var activePlayer;
+var playerObjectArray;
 
 const dieImageArray = ['one.png','two.png','three.png','four.png','five.png','six.png'];
 
@@ -17,16 +26,19 @@ var addPlayers = document.getElementById("playerEntry2");
 var playerScoreBoard = document.getElementById("gameContent2");
 var gameMessage = document.getElementById("gameConsoleMessage");
 var roundText = document.getElementById("roundText");
-var dieDiv = document.getElementById("die");
+var dieDiv = document.getElementById("dieHolder");
 var dieClass = dieDiv.getElementsByClassName("die");
 
 
 //classes
+
 class Player {
     constructor(name, score, active){
         this.name = name;
         this.score = score;
-        this.active = active;
+        this.active = active
+        this.farkles = 0;
+        this.rolls = 0;
     }
 }
 
@@ -42,13 +54,48 @@ class Die {
     }
   }
 
+document.addEventListener('click', function (event) {
+
+	if (event.target.className == 'die' && playerObjectArray[currentPlayer].rolls > 0) {
+
+        event.target.className = 'die inactive';
+        return;
+    }
+    if (event.target.className == 'die inactive' && playerObjectArray[currentPlayer].rolls > 0){
+
+        event.target.className = 'die';
+        return;
+    }
+
+    if (event.target.matches(".buttonactive")) {
+        console.log('you just clicked a glowing button');
+        return;
+    }
+
+}, false);
+
+document.addEventListener('mouseover', function (event) {
+    if(event.target.className === 'die' && playerObjectArray[currentPlayer].rolls > 0) {
+        event.target.style = "filter: invert(100%);";
+    }
+}, false);
+
+document.addEventListener('mouseout', function (event) {
+    if(event.target.className === 'die' && playerObjectArray[currentPlayer].rolls > 0) {
+        event.target.style = "filter: none;";
+    }
+}, false);
+
+
+
+
 //functions
 //exit startScreen, enter playerEntry screen
 function startGame() {
     startScreen.style.display = "none";
     playerEntry.style.display = "grid";
-    playerArray = [];
-    playerScoreArray = [];
+    playerEntryArray = [];
+    playerObjectArray = [];
     addPlayers.innerHTML = "Players:<br>"
 }
 //validate and add players as entered
@@ -57,14 +104,14 @@ function addPlayer() {
     if (name.value == '') {
         alert('you must input a name!');
         return;
-    }else if(playerArray.includes(name.value) ) {
+    }else if(playerEntryArray.includes(name.value) ) {
         alert('each player must have a different name!');
         name.value = '';
         return;
     }else{
-        playerArray.push(name.value);
+        playerEntryArray.push(name.value);
         addPlayers.innerHTML += `<br>${name.value}`;
-        console.log(playerArray);
+        console.log(playerEntryArray);
         name.value = '';
         }
     //enable carriage returns to add players
@@ -86,13 +133,13 @@ function doneAddingPlayers(array) {
         startGame();
         return;
     }
-    for (i=0; i<array.length; i++) {
-        playerScoreArray[i] = new Player(array[i], 0, false);
+    for (let i=0; i<array.length; i++) {
+        playerObjectArray[i] = new Player(array[i], 0, false);
     }
-    choosePlayer(playerScoreArray);
-    updatePlayers(playerScoreArray, playerScoreBoard);
+    choosePlayer(playerObjectArray);
+    updatePlayers(playerObjectArray, playerScoreBoard);
     initializeDice();
-    setPlayerActive(playerScoreBoard, playerScoreArray);
+    setPlayerActive(playerScoreBoard, playerObjectArray);
 }
 //randomly choose first player
 function choosePlayer(array) {
@@ -106,9 +153,8 @@ function choosePlayer(array) {
 function setPlayerActive(location, array) {
     let currentPlayers = location.getElementsByTagName('li');
 
-    for(i=0; i<array.length; i++) {
+    for(let i=0; i<array.length; i++) {
         if(array[i].active === true) {
-            console.log(`${array[i].name} is the active player; that's position ${[i]} in playerScoreArray`);
             currentPlayers[i].style.color = 'red';
             currentPlayers[i].style.listStyle = 'default';
         } else {
@@ -129,18 +175,21 @@ function initializeDice() {
     playerEntry.style.display = "none";
     gameContent.style.display = "grid";
 }
+//reset the dice to original value/appearance
 
-for (var i = 0; i < dieClass.length; i++) {
-  dieClass[i].addEventListener("click", function() {
-  if(this.className != "die inactive") {
-  this.className = "die inactive";
-  }else{
-  this.className = "die";
-  }
-  });
+function resetDice () {
+    for (let i = 0; i < dieClass.length; i++) {
+        dieArray[i].value = 0;
+        dieArray[i].active = true;
+        document.getElementById(`die${[i]}`).src = dieImageArray[0];
+        if(dieClass[i].className = "die inactive") {
+            dieClass[i].className = "die";
+        }
+        if(dieClass[i].style = "filter: invert(100%);") {
+            dieClass[i].style = "filter: none;";
+        }
+    }
 }
-
-
 
 //check to see if there's a winning score
 function checkScore(el) {
@@ -156,17 +205,17 @@ function updateRound(array) {
     array.some(checkScore);
     //add current points to current player's total
     array[currentPlayer].score += currentPoints;
-    playerScoreArray[currentPlayer].active = false;
+    playerObjectArray[currentPlayer].active = false;
     //update player list
     playerScoreBoard.innerHTML = '';
-    updatePlayers(playerScoreArray, playerScoreBoard);
+    updatePlayers(playerObjectArray, playerScoreBoard);
     //return to start of array after last player
     if(currentPlayer==(array.length-1)) {currentPlayer = 0;
         }else{
         currentPlayer ++;
     }
-    playerScoreArray[currentPlayer].active = true;
-    console.log(playerScoreArray);
+    playerObjectArray[currentPlayer].active = true;
+    console.log(playerObjectArray);
     currentPoints = 0;
     roundCount++;
 
@@ -174,12 +223,19 @@ function updateRound(array) {
         roundText.innerHTML = `Round ${++round}:`;
         roundCount = 0;
     }
-    setPlayerActive(playerScoreBoard, playerScoreArray);
+
+    resetDice();
+    playerObjectArray[currentPlayer].rolls = 0;
+    setPlayerActive(playerScoreBoard, playerObjectArray);
     gameMessage.innerHTML = `Hello ${array[currentPlayer].name}. Please roll the dice.`
 }
 //makes die inactive when clicked, and gets new hand when roll button is pushed(currently inactive function)
-function processHand(dieInterfaces, dieObjects) {
+function processHand(dieInterfaces, dieObjects, playerObjects) {
     let currentHand = [];
+
+    playerObjects[currentPlayer].rolls++
+
+    //links die interface active class to die object active property
     for(i=0; i<dieInterfaces.length; i++) {
       if(dieInterfaces[i].className === 'die inactive') {
         dieObjects[i].active = false;
@@ -192,13 +248,37 @@ function processHand(dieInterfaces, dieObjects) {
     let sortHand = currentHand.sort(function(a, b){return a-b});
 
     //check for a sixkind and add points if true. If false, evaluate for straight; if false evaluate hand;
+    //put this inside a conditional, or run a function to check for points followed by no points...
+    //maybe we need a currentPointsBefore and a currentPointsAfter....
     evalSixKind(sortHand) ? true : evalStraight(sortHand) ? true : evalMain(sortHand);
 
+//if no points, next player, assign farkle 
     console.log(currentPoints);
+    if (currentPoints === 0 && playerObjects[currentPlayer].rolls === 1) {
+        playerObjects[currentPlayer].farkles++;
+        updateRound(playerObjectArray);
+        alert(`Sorry ${playerObjects[currentPlayer].name}. You just farkled!`)
+    }
+//(if player gets three farkles in a row, -1000 points)
+    if (currentPoints === 0 && playerObjects[currentPlayer].farkles === 3) {
+        playerObjects[currentPlayer].score -= 1000;
+        alert(`Oh no, matey! ${playerObjects[currentPlayer].name}. You farkled thrice and lost 1000 points!`);
+        playerObjects[currentPlayer].farkles = 0;
+        updateRound(playerObjectArray);
+    }
 
-    //if no points, next player, assign farkle (if player gets three farkles in a row, -1000 points)
+    if (currentPoints > 0 && playerObjects[currentPlayer].rolls >= 1) {
+        gameMessage.innerHTML = `${playerObjects[currentPlayer].name}! You currently have ${currentPoints} points; Click the die
+        you'd like to keep and roll again to try for more points, or hit stay to keep what you have.`
+    }
+//if currentPoints from first roll are the same as currentPoints from second roll, farkle out.
+    if (currentPoints === 0 && playerObjects[currentPlayer].rolls >= 1) {
+        alert(`Bad luck ${playerObjects[currentPlayer].name}. You lost the points you had!`)
+        updateRound(playerObjectArray);
+    }
 
     console.log(currentHand);
+
     currentHand = [];
   }
 //calls rollDie on each die as long as they're active, and puts a value on each die.
@@ -285,115 +365,20 @@ function evalMain(hand) {
     }
 }
 
-//remove rolling functionality; call 'processHand()' and insert current hand array
 //maybe add a message indicating what type of hand they got...
-
-/* function rollDice() {
-    let currentHand = [];
-    for(i=0; i<=5; i++) {// i<=(arg.length)
-    let roll = (Math.floor(Math.random() * 6));
-    document.getElementById(`die${[i]}`).src = dieImageArray[roll];
-    currentHand.push(roll);
-    }
-    //put hand in order, to check for pairs
-    let sortHand = currentHand.sort(function(a, b){return a-b});
-
-    //check for a sixkind and add points if true. If false, evaluate for straight; if false evaluate hand;
-    evalSixKind(sortHand) ? true : evalStraight(sortHand) ? true : evalMain(sortHand);
-
-    console.log(currentPoints);
-
-    //if no points, next player, assign farkle (if player gets three farkles in a row, -1000 points)
-
-    console.log(currentHand);
-    currentHand = [];
-}
- */
-/*  function createDice() {
-    let mydieArray = [];
-
-    for (i=0; i<=5; i++) {
-    mydieArray[i] = new Die(`Die${i}`);
-    }
-}
-
-*/
-
-/*  function rollDice() {
-
-}
-
-*/
-
-
-/* function checkHand(hand) {
-    hand is gonna be an array sent from the rolled dice, and it's length is dependent on active dice
-    let currentHand = hand;
-
-    //put hand in order, to check for pairs
-    let sortHand = currentHand.sort(function(a, b){return a-b});
-
-    //check for a sixkind and add points if true. If false, evaluate for straight; if false evaluate hand;
-    evalSixKind(sortHand) ? true : evalStraight(sortHand) ? true : evalMain(sortHand);
-
-    console.log(currentPoints);
-
-    //if no points, next player, assign farkle (if player gets three farkles in a row, -1000 points)
-    //if points and 'stay', add currentPoints to player total
-    //there may have to be a 'pot', in which currentPoints are tallied until farkle or 'stay'.
-
-    console.log(currentHand);
-    currentHand = [];
-} */
-
-
-
-
-
-
-
-
-
-
-
 
 
 //add "click the dice you want to keep and roll again, or"
 //enter clicked die into current hand, only roll the number of die not clicked.
 
-
-    //Count round 1. play screen first player, six die,  hit roll, all die produce random face.
-
-/*     for (round = 1; playerScore.any < 10000; round++) {
-
-
-    } */
-    
     //tally kept die at start of new roll, and add to running total
 
     //if all six die produce points, keep going until keep points or lose points.
-        
-    //tally die at end of round and if > 0, add to player score
-
-
 
     //go to next player. repeat above.
 
 
 
-    //repeat above until no more players.
-
-
-
-    //Count another round.
-
-    //if any player's score reaches 10000, show win screen.
-
-//gameState3 
-
-    //show final scores
-    //so and so wins
-    //play again?
 
 
 

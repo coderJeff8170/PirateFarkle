@@ -14,7 +14,7 @@
     <div id="startScreen">
         <img src="piratefarkletitle2.gif" alt="Pirate Farkle!">
         </br>
-        <button type="button" class="button" onclick="startGame()">Start Game!</button>
+        <button type="button" class="buttonactive" onclick="startGame()">Start Game!</button>
     </div>
     <div id="playerEntry">
         <div id="playerEntry1">
@@ -26,7 +26,7 @@
 
             <p id="demo"></p><!--list names as they're entered?-->
 
-            <button type="button" class="button" onclick="doneAddingPlayers(playerArray)">Done</button>
+            <button type="button" class="button" onclick="doneAddingPlayers(playerEntryArray)">Done</button>
             <button type="button" class="button" onclick="startGame()">Reset</button>
         </div>
         <div id="playerEntry2">Player:<br></div>
@@ -36,7 +36,7 @@
     <div id="gameWrapper">
         <div id="gameContent1">
             <h1>Pirate Farkel!</h1>
-            <div id="die">
+            <div id="dieHolder">
                 <img class="die" id="die0" src="one.png" width="200" height="200" alt="die goes here!">
                 <img class="die" id="die1" src="one.png" width="200" height="200" alt="die goes here!">
                 <img class="die" id="die2" src="one.png" width="200" height="200" alt="die goes here!">
@@ -46,8 +46,8 @@
                 <img class="die" id="die5" src="one.png" width="200" height="200" alt="die goes here!">
             </div>
             <br>
-            <button type="button" class="button" onclick="processHand(dieClass, dieArray)">Roll The Dice!</button>
-            <button type="button" class="button" onclick="updateRound(playerScoreArray)">Stay!</button>
+            <button type="button" class="button" onclick="processHand(dieClass, dieArray, playerObjectArray)">Roll The Dice!</button>
+            <button type="button" class="button" onclick="updateRound(playerObjectArray)">Stay!</button>
         </div>
         <div id = "playerBar">
             <h1 id="roundText">Round 1:</h1>
