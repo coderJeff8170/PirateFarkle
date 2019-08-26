@@ -1,8 +1,7 @@
 //if all dice are active when you roll again, current points = current points minus previous current points
 //if a roll yields zero points, next player, add a farkle.
 //if a player gets three farkles, minus 1000, reset farkles to zero.
-//if a die that scores is not clicked and rolled again, remove that score from current points...or...
-//prevent die from being made active again after being clicked inactive, and then rolled.
+
 
 
 
@@ -15,7 +14,6 @@ let roundCount = 0;
 let round = 1;
 let firstPlayer;
 let currentPlayer;
-let finalHand = [];
 var currentPoints = 0;
 var playerObjectArray;
 
@@ -58,33 +56,16 @@ class Die {
 
 document.addEventListener('click', function (event) {
 
-	if (event.target.className === 'die' && playerObjectArray[currentPlayer].rolls > 0) {
-        //how to leverage this?
-        for(let i=0; i<dieArray.length; i++){
-            if (event.target.id === dieArray[i].name) {
-                console.log(dieArray[i].value);
-            }
-        }
-        for(let i=0; i<dieArray.length; i++) {
-            if(event.target.id === dieArray[i].name) {
-              dieArray[i].active = false;
-          }
-        }
+	if (event.target.className == 'die' && playerObjectArray[currentPlayer].rolls > 0) {
+
         event.target.className = 'die inactive';
-        console.log(dieArray);
         return;
     }
-    if (event.target.className === 'die inactive' && playerObjectArray[currentPlayer].rolls > 0){
-        for(let i=0; i<dieArray.length; i++) {
-            if(event.target.id === dieArray[i].name) {
-              dieArray[i].active = true;
-          }
-        }
+    if (event.target.className == 'die inactive' && playerObjectArray[currentPlayer].rolls > 0){
+
         event.target.className = 'die';
-        console.log(dieArray);
         return;
-    
-}
+    }
 
     if (event.target.matches(".buttonactive")) {
         console.log('you just clicked a glowing button');
@@ -220,13 +201,6 @@ function checkScore(el) {
 }
 
 function updateRound(array) {
-
-    //you'll have to add some of the guts of 'process hand' here. The sort hand and the evaluation stuff
-    //the score will only be processed once 'stay' is pressed.
-
-
-
-
     //figure out why this executes late
     array.some(checkScore);
     //add current points to current player's total
@@ -251,46 +225,39 @@ function updateRound(array) {
     }
 
     resetDice();
-    tempHand =[];
     playerObjectArray[currentPlayer].rolls = 0;
     setPlayerActive(playerScoreBoard, playerObjectArray);
     gameMessage.innerHTML = `Hello ${array[currentPlayer].name}. Please roll the dice.`
 }
 //makes die inactive when clicked, and gets new hand when roll button is pushed(currently inactive function)
-function processHand(dieObjects, playerObjects) {
-    //declares a temporary hand for farkle evaluation only
-    let tempHand = [];
+function processHand(dieInterfaces, dieObjects, playerObjects) {
+    let currentHand = [];
 
-    //increments player object's 'rolls' value by 1
     playerObjects[currentPlayer].rolls++
 
-    //when roll is clicked, any die with 'die inactive' class will be assigned an active value of 'false'
-    //and any die with 'die' class will be assigned an active value of 'true'.
-/*     for(i=0; i<dieInterfaces.length; i++) {
+    //links die interface active class to die object active property
+    for(i=0; i<dieInterfaces.length; i++) {
       if(dieInterfaces[i].className === 'die inactive') {
         dieObjects[i].active = false;
       }else{
         dieObjects[i].active = true;
       }
-    } */
+    }
+    getCurrentHand(dieObjects, currentHand);
 
-    //fills the 'tempHand' array with random values from the 'rollDie' method of die Object on the first roll
-    //and replaces active die Object values on subsequent rolls.
-    getTempHand(dieObjects, tempHand);
+    let sortHand = currentHand.sort(function(a, b){return a-b});
 
-    //sorts the temporary hand in numerical order
-    let sortTempHand = tempHand.sort(function(a, b){return a-b});//moves
-
-    //checks the tempHand for a sixkind and add points if true. If false, evaluate for straight; if false evaluate hand;
-    evalSixKind(sortTempHand) ? true : evalStraight(sortTempHand) ? true : evalMain(sortTempHand);//moves
-
+    //check for a sixkind and add points if true. If false, evaluate for straight; if false evaluate hand;
+    //put this inside a conditional, or run a function to check for points followed by no points...
+    //maybe we need a currentPointsBefore and a currentPointsAfter....
+    evalSixKind(sortHand) ? true : evalStraight(sortHand) ? true : evalMain(sortHand);
 
 //if no points, next player, assign farkle 
     console.log(currentPoints);
     if (currentPoints === 0 && playerObjects[currentPlayer].rolls === 1) {
         playerObjects[currentPlayer].farkles++;
-        alert(`Sorry ${playerObjects[currentPlayer].name}. You just farkled!`)
         updateRound(playerObjectArray);
+        alert(`Sorry ${playerObjects[currentPlayer].name}. You just farkled!`)
     }
 //(if player gets three farkles in a row, -1000 points)
     if (currentPoints === 0 && playerObjects[currentPlayer].farkles === 3) {
@@ -299,34 +266,26 @@ function processHand(dieObjects, playerObjects) {
         playerObjects[currentPlayer].farkles = 0;
         updateRound(playerObjectArray);
     }
-//successful second plus rolls:
+
     if (currentPoints > 0 && playerObjects[currentPlayer].rolls >= 1) {
         gameMessage.innerHTML = `${playerObjects[currentPlayer].name}! You currently have ${currentPoints} points; Click the die
         you'd like to keep and roll again to try for more points, or hit stay to keep what you have.`
     }
-
-//if second plus rolls yield a zero
+//if currentPoints from first roll are the same as currentPoints from second roll, farkle out.
     if (currentPoints === 0 && playerObjects[currentPlayer].rolls >= 1) {
-        alert(`Bad luck ${playerObjects[currentPlayer].name}. You lost the points you had!`);
+        alert(`Bad luck ${playerObjects[currentPlayer].name}. You lost the points you had!`)
         updateRound(playerObjectArray);
     }
 
-    console.log(tempHand);
+    console.log(currentHand);
 
-    //tempHand = [];
+    currentHand = [];
   }
-
-//fills the 'tempHand' array with random values from the 'rollDie' method of die Object on the first roll
-//and replaces active die Object values on subsequent rolls.
-
-//how to evaluate only the points acquired from each roll?
-
-function getTempHand (array, hand) {
+//calls rollDie on each die as long as they're active, and puts a value on each die.
+//also returns a new hand based on all values of active die (currently inactive function)
+function getCurrentHand (array, hand) {
 
     for (i=0; i<array.length; i++) {
-        if (array[i].active === true && playerObjectArray[currentPlayer].rolls >= 1) {
-            hand.splice(i, 1);
-        }
         if (array[i].active === true) {
         array[i].value = array[i].rollDie();
         hand.push(array[i].value);
@@ -406,6 +365,17 @@ function evalMain(hand) {
     }
 }
 
+//maybe add a message indicating what type of hand they got...
+
+
+//add "click the dice you want to keep and roll again, or"
+//enter clicked die into current hand, only roll the number of die not clicked.
+
+    //tally kept die at start of new roll, and add to running total
+
+    //if all six die produce points, keep going until keep points or lose points.
+
+    //go to next player. repeat above.
 
 
 
