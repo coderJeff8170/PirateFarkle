@@ -49,6 +49,7 @@ class Die {
         this.name = name;
         this.img = img;
         this.active = true;
+        this.clicked = false;
         this.value = 0;
     }
     rollDie() {
@@ -59,23 +60,25 @@ class Die {
 document.addEventListener('click', function (event) {
 
 	if (event.target.className === 'die' && playerObjectArray[currentPlayer].rolls > 0) {
-        //how to leverage this?
-        for(let i=0; i<dieArray.length; i++){
-            if (event.target.id === dieArray[i].name) {
-                console.log(dieArray[i].value);
+
+            for(let i=0; i<dieArray.length; i++) {
+                if (event.target.id === dieArray[i].name && dieArray[i].clicked === true){
+                    return;
+                }
+                //^^where do i put this to prevent it from being clicked after the roll??
+                if(event.target.id === dieArray[i].name) {
+                dieArray[i].active = false;
             }
-        }
-        for(let i=0; i<dieArray.length; i++) {
-            if(event.target.id === dieArray[i].name) {
-              dieArray[i].active = false;
-          }
-        }
-        event.target.className = 'die inactive';
-        console.log(dieArray);
-        return;
+            }
+            event.target.className = 'die inactive';
+            console.log(dieArray);
+            return;
     }
     if (event.target.className === 'die inactive' && playerObjectArray[currentPlayer].rolls > 0){
         for(let i=0; i<dieArray.length; i++) {
+            if (event.target.id === dieArray[i].name && dieArray[i].clicked === true){
+                return;
+            }
             if(event.target.id === dieArray[i].name) {
               dieArray[i].active = true;
           }
@@ -200,6 +203,7 @@ function resetDice () {
     for (let i = 0; i < dieClass.length; i++) {
         dieArray[i].value = 0;
         dieArray[i].active = true;
+        dieArray[i].clicked = false;
         document.getElementById(`die${[i]}`).src = dieImageArray[0];
         if(dieClass[i].className = "die inactive") {
             dieClass[i].className = "die";
@@ -256,7 +260,7 @@ function updateRound(array) {
     setPlayerActive(playerScoreBoard, playerObjectArray);
     gameMessage.innerHTML = `Hello ${array[currentPlayer].name}. Please roll the dice.`
 }
-//makes die inactive when clicked, and gets new hand when roll button is pushed(currently inactive function)
+//gets new hand when roll button is pushed(currently inactive function)
 function processHand(dieObjects, playerObjects) {
     //declares a temporary hand for farkle evaluation only
     let tempHand = [];
@@ -264,15 +268,12 @@ function processHand(dieObjects, playerObjects) {
     //increments player object's 'rolls' value by 1
     playerObjects[currentPlayer].rolls++
 
-    //when roll is clicked, any die with 'die inactive' class will be assigned an active value of 'false'
-    //and any die with 'die' class will be assigned an active value of 'true'.
-/*     for(i=0; i<dieInterfaces.length; i++) {
-      if(dieInterfaces[i].className === 'die inactive') {
-        dieObjects[i].active = false;
-      }else{
-        dieObjects[i].active = true;
-      }
-    } */
+    for(let i=0; i<dieObjects.length; i++) {
+        if(dieObjects[i].active === false) {
+            dieObjects[i].clicked = true;
+        }
+    }
+
 
     //fills the 'tempHand' array with random values from the 'rollDie' method of die Object on the first roll
     //and replaces active die Object values on subsequent rolls.
