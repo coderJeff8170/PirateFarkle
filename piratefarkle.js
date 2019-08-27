@@ -1,10 +1,16 @@
 //if all dice are active when you roll again, current points = current points minus previous current points
-//if a roll yields zero points, next player, add a farkle.
-//if a player gets three farkles, minus 1000, reset farkles to zero.
+
 //if a die that scores is not clicked and rolled again, remove that score from current points...or...
-//prevent die from being made active again after being clicked inactive, and then rolled.
 
 
+//evaluate points from first hand, then each clicked hand, and finally leftovers before stay
+//if the first hand is zero, farkle
+//if any subsequent hand is zero, next player and lose points
+//at each roll, count new points?
+//call clicked die values new points?
+
+//only active die produce new points.
+//clicked die values retain points.
 
 
 
@@ -274,7 +280,6 @@ function processHand(dieObjects, playerObjects) {
         }
     }
 
-
     //fills the 'tempHand' array with random values from the 'rollDie' method of die Object on the first roll
     //and replaces active die Object values on subsequent rolls.
     getTempHand(dieObjects, tempHand);
@@ -282,6 +287,8 @@ function processHand(dieObjects, playerObjects) {
     //sorts the temporary hand in numerical order
     let sortTempHand = tempHand.sort(function(a, b){return a-b});//moves
 
+
+    //perhaps only evaluate the first two when the hand length is 6...
     //checks the tempHand for a sixkind and add points if true. If false, evaluate for straight; if false evaluate hand;
     evalSixKind(sortTempHand) ? true : evalStraight(sortTempHand) ? true : evalMain(sortTempHand);//moves
 
