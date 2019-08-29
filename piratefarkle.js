@@ -1,6 +1,7 @@
 //if all dice are active when you roll again, current points = current points minus previous current points
 
 //if a die that scores is not clicked and rolled again, remove that score from current points...or...
+//actually if you put point scoring in it's own function, you can pass it around AS NEEEDED!!
 
 
 //evaluate points from first hand, then each clicked hand, and finally leftovers before stay
