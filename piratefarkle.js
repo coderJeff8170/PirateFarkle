@@ -18,6 +18,7 @@
 //global variables - yikes!
 let playerEntryArray = [];
 let dieArray = [];
+let clickedDieArray = [];
 let roundCount = 0;
 let round = 1;
 let firstPlayer;
@@ -92,15 +93,8 @@ document.addEventListener('click', function (event) {
         }
         event.target.className = 'die';
         console.log(dieArray);
-        return;
-    
-}
-
-    if (event.target.matches(".buttonactive")) {
-        console.log('you just clicked a glowing button');
-        return;
+        return;   
     }
-
 }, false);
 
 document.addEventListener('mouseover', function (event) {
@@ -271,6 +265,8 @@ function updateRound(array) {
 function processHand(dieObjects, playerObjects) {
     //declares a temporary hand for farkle evaluation only
     let tempHand = [];
+    //currentPoints = 0;
+    clickedDieArray = [];
 
     //increments player object's 'rolls' value by 1
     playerObjects[currentPlayer].rolls++
@@ -293,7 +289,14 @@ function processHand(dieObjects, playerObjects) {
     //checks the tempHand for a sixkind and add points if true. If false, evaluate for straight; if false evaluate hand;
     evalSixKind(sortTempHand) ? true : evalStraight(sortTempHand) ? true : evalMain(sortTempHand);//moves
 
+    for(let i=0; i<dieObjects.length; i++) {
+        if(dieObjects[i].active === false) {
+            clickedDieArray.push(dieObjects[i].value);
+        }
+    }
+console.log(`the array of clicked dice is ${clickedDieArray}`);
 
+//evaluateFarkles();
 //if no points, next player, assign farkle 
     console.log(currentPoints);
     if (currentPoints === 0 && playerObjects[currentPlayer].rolls === 1) {
@@ -308,16 +311,17 @@ function processHand(dieObjects, playerObjects) {
         playerObjects[currentPlayer].farkles = 0;
         updateRound(playerObjectArray);
     }
-//successful second plus rolls:
-    if (currentPoints > 0 && playerObjects[currentPlayer].rolls >= 1) {
-        gameMessage.innerHTML = `${playerObjects[currentPlayer].name}! You currently have ${currentPoints} points; Click the die
-        you'd like to keep and roll again to try for more points, or hit stay to keep what you have.`
-    }
 
 //if second plus rolls yield a zero
     if (currentPoints === 0 && playerObjects[currentPlayer].rolls >= 1) {
         alert(`Bad luck ${playerObjects[currentPlayer].name}. You lost the points you had!`);
         updateRound(playerObjectArray);
+    }
+//successful second plus rolls:
+    if (currentPoints > 0 && playerObjects[currentPlayer].rolls >= 1) {
+        gameMessage.innerHTML = `${playerObjects[currentPlayer].name}! You currently have ${currentPoints} points; Click the die
+        you'd like to keep and roll again to try for more points, or hit stay to keep what you have.`
+        
     }
 
     console.log(tempHand);
@@ -359,7 +363,7 @@ function evalSixKind(hand){
             return false;
         }
     }
-    currentPoints = currentPoints + 3000;
+    currentPoints += 3000;
     return true;
 }
 //function to check for a straight (1, 2, 3, 4, 5, 6) give 1500 points
@@ -369,7 +373,7 @@ function evalStraight(hand){
             return false;
         }
     }
-    currentPoints = currentPoints + 1500;
+    currentPoints += 1500;
     return true;
 }
 //function to evaluate hand for points if no straight or six of a kind
@@ -382,36 +386,44 @@ function evalMain(hand) {
     let sixes = hand.filter(x => x === 5);
 //check for pairs
     if (hand[0] === hand[1] && hand[2] === hand[3] && hand[4] === hand[5]) {
-        currentPoints = currentPoints + 1500;
+        currentPoints += 1500;
         return;
     }
 //check for triplets
     if (hand[0] === hand[1] && hand[1] === hand[2] && hand[3] === hand[4] && hand[4] === hand[5]) {
-        currentPoints = currentPoints + 2500;
+        currentPoints += 2500;
         return;
     }
 //check hand for points
-    if (ones.length === 3) {
-        currentPoints = currentPoints + 300;
-    } else {
-        currentPoints = currentPoints + (ones.length * 100);
+    if (ones.length >= 3) {
+        currentPoints += 300;
     }
-    if (twos.length === 3) {
-        currentPoints = currentPoints + 200;
+    if (ones.length > 3){
+        currentPoints += ((ones.length-3) * 100);
     }
-    if (threes.length === 3) {
-        currentPoints = currentPoints + 300;
+    if (ones.length < 3){
+        currentPoints += (ones.length * 100);
     }
-    if (fours.length === 3) {
-        currentPoints = currentPoints + 400;
+    if (twos.length >= 3) {
+        currentPoints += 200;
     }
-    if (fives.length === 3) {
-        currentPoints = currentPoints + 500;
-    } else {
-        currentPoints = currentPoints + (fives.length * 50);
+    if (threes.length >= 3) {
+        currentPoints += 300;
     }
-    if (sixes.length === 3) {
-        currentPoints = currentPoints + 600;
+    if (fours.length >= 3) {
+        currentPoints += 400;
+    }
+    if (fives.length >= 3) {
+        currentPoints += 500;
+    }
+    if (fives.length > 3){
+        currentPoints += ((fives.length-3) * 50);
+    }
+    if (fives.length < 3){
+        currentPoints += (fives.length * 50);
+    }
+    if (sixes.length >= 3) {
+        currentPoints += 600;
     }
 }
 
