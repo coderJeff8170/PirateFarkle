@@ -18,6 +18,8 @@
 //global variables - yikes!
 let playerEntryArray = [];
 let dieArray = [];
+//vv an array of arrays, each inner array created each time dice are rolled, for final point calculation..
+let pointArray = [];
 let clickedDieArray = [];
 let roundCount = 0;
 let round = 1;
@@ -226,13 +228,7 @@ function checkScore(el) {
 
 function updateRound(array) {
 
-    //you'll have to add some of the guts of 'process hand' here. The sort hand and the evaluation stuff
-    //the score will only be processed once 'stay' is pressed.
-
-
-
-
-    //figure out why this executes late
+    //figure out why this executes late - use a callback to execute it first.
     array.some(checkScore);
     //add current points to current player's total
     array[currentPlayer].score += currentPoints;
@@ -260,11 +256,13 @@ function updateRound(array) {
     playerObjectArray[currentPlayer].rolls = 0;
     setPlayerActive(playerScoreBoard, playerObjectArray);
     gameMessage.innerHTML = `Hello ${array[currentPlayer].name}. Please roll the dice.`
+    pointArray = [];
 }
-//gets new hand when roll button is pushed(currently inactive function)
+//rolls dice, evaluates for points, checks for farkles, each time 'roll dice' is clicked
 function processHand(dieObjects, playerObjects, farkles) {
     //declares a temporary hand for farkle evaluation only
     let tempHand = [];
+
     //currentPoints = 0;
     //clickedDieArray = [];
 
@@ -277,7 +275,7 @@ function processHand(dieObjects, playerObjects, farkles) {
         if(dieObjects[i].active === false) {
             dieObjects[i].clicked = true;
         }
-    } */
+} */
 
     //fills the 'tempHand' array with random values from the 'rollDie' method of die Object on the first roll
     //and replaces active die Object values on subsequent rolls.
@@ -287,18 +285,18 @@ function processHand(dieObjects, playerObjects, farkles) {
     //I can now use evalPoints to evaluate points on any array, the next step to figuring dynamic point scoring
     evalPoints(tempHand);
 
-
 /*     for(let i=0; i<dieObjects.length; i++) {
         if(dieObjects[i].active === false) {
             clickedDieArray.push(dieObjects[i].value);
         }
     }
 console.log(`the array of clicked dice is ${clickedDieArray}`); */
+
+//pointArray.push(chosenPoints);
+
     console.log(tempHand);
     farkles(playerObjectArray);
-    //tempHand = [];
-  }
-
+}
 
 function evalPoints(hand) {
     let sortedHand = hand.sort(function(a, b){return a-b});
